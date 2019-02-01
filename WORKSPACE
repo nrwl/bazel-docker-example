@@ -11,6 +11,13 @@ workspace(name = "angular_bazel_example")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "aed1c249d4ec8f703edddf35cbe9dfaca0b5f5ea6e4cd9e83e99f3b0d1136c3d",
+    strip_prefix = "rules_docker-0.7.0",
+    urls = ["https://github.com/bazelbuild/rules_docker/archive/v0.7.0.tar.gz"],
+)
+
+http_archive(
     name = "build_bazel_rules_nodejs",
     sha256 = "895c2b0d1480834808216fb36cd4bf21517954cb966c893ee42421dfefcfd4bc",
     strip_prefix = "rules_nodejs-1f6d878a9ea3a095291f66e3d1a0f6b4641f5159",
@@ -125,3 +132,21 @@ ng_setup_workspace()
 load("@angular_material//:index.bzl", "angular_material_setup_workspace")
 
 angular_material_setup_workspace()
+
+
+## DOCKER ##
+
+
+# Download base images, etc.
+load(
+    "@io_bazel_rules_docker//nodejs:image.bzl",
+    _nodejs_image_repos = "repositories",
+)
+
+_nodejs_image_repos()
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+container_repositories()
